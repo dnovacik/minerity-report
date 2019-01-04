@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <mr-loader v-if="this.isContactingService"/>
+    <mr-loader v-if="this.isContactingService" :message="'Contacting service...'"/>
     <mr-header :firebaseKey="this.firebaseKey" />
     <router-view class="non-selectable" :onHandleLogin="this.handleLogin" :firebaseKey="this.firebaseKey" :loginError="this.loginError"></router-view>
   </div>
