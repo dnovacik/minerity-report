@@ -40,8 +40,6 @@ export default {
             padding: 0 8px;
         }
         input{
-            // clip-path: polygon(0px 0px, 20px 0px, 20px 20px, 0px 20px);
-
             border: 1px solid rgba(255,255,255,0.3);
             padding: 10px 22px;
             background-color: transparent;
