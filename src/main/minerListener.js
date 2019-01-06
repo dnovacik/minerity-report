@@ -52,14 +52,42 @@ export class CpuMinerDataReader extends EventEmitter {
         this.ipPort = ipPort;
         this.algo = algo;
         this.cpuCount = cpuCount;
+        this.data = { labels: [], datasets: [{}] }
         this.client = new wsClient();
 
         setInterval(() => this.client.connect(`ws://${ipPort}/threads`, 'text'), interval * 1000);
 
         this.client.on('connect', (connection) => {
             connection.on('message', (e) => {
-                this.emit('message', e);
+                console.log(e);
+                let result = this.parseHashrateMessage(e.utf8Data, this);
+                this.emit('message', result);
             });
         });
+    }
+
+    parseHashrateMessage = (e, that) => {
+        //"CPU=0;kH/s=29.20|CPU=1;kH/s=29.19|"
+        let obj = that;
+        let cpus = e.split('|');
+        console.log(cpus);
+
+        for (cpu in cpus) {
+            let cpuData = cpu.split(';');
+
+            for (data in cpuData) {
+                let each = data.split('=');
+
+                obj.data.labels.push(Date.now());
+                
+                if (obj.data.datasets.filter(e => e.label === 'CPU0').length > 0) {
+                    
+                }
+
+                // obj.data.datasets.push({
+                //     data: []
+                // })
+            }
+        }
     }
 }
