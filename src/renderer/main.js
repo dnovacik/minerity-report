@@ -2,7 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 
 import App from './App';
-import router from './router';
+import router from './router/index';
 
 import firebase from 'firebase';
 

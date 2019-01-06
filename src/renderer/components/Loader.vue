@@ -1,6 +1,6 @@
 <template>
     <div class="overlay">
-        <spinner class="spinner" size="medium" line-fg-color="#485460" text-fg-color="#485460" message="Contacting service..." />
+        <spinner class="spinner" size="medium" line-fg-color="#485460" text-fg-color="#485460" :message="this.loaderMessage" />
     </div>    
 </template>
 
@@ -11,6 +11,9 @@ export default {
     name: 'mrLoader',
     components: {
         Spinner
+    },
+    props: {
+        loaderMessage: String
     }
 }
 </script>
@@ -23,5 +26,6 @@ export default {
         align-items: center;
         text-align: center;
         min-height: 100vh;
+        background: transparent;
     }
 </style>

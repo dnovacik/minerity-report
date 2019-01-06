@@ -1,15 +1,16 @@
 <template>
   <div id="app">
-    <mr-loader v-if="this.isContactingService"/>
+    <mr-loader v-if="this.isContactingService" :message="'Contacting service...'"/>
     <mr-header :firebaseKey="this.firebaseKey" />
-    <router-view class="non-selectable" :onHandleLogin="this.handleLogin" :firebaseKey="this.firebaseKey" :loginError="this.loginError"></router-view>
+    <router-view class="non-selectable" :onHandleRegister="this.handleRegister" :onHandleInsertBindsToUser="this.handleInsertBindsToUser"
+      :firebaseKey="this.firebaseKey" :registerError="this.registerError" :apiBinds="this.apiBinds"></router-view>
   </div>
 </template>
 
 <script>
   import firebase from 'firebase';
-  import mrHeader from '@/components/Header';
-  import mrLoader from '@/components/Loader';
+  import mrHeader from '@/renderer/components/Header';
+  import mrLoader from '@/renderer/components/Loader';
 
   export default {
     name: 'minerity-report',
@@ -19,13 +20,17 @@
     },
     data() {
       return {
-        firebaseKey: null,
-        loginError: null,
-        isContactingService: false
+        firebaseKey: localStorage.getItem('firebaseKey'),
+        registerError: null,
+        isContactingService: false,
+        apiBinds: []
       }
     },
+    mounted() {
+      this.handleLogin();
+    },
     methods: {
-      handleLogin(seed) {
+      handleRegister(seed) {
         this.isContactingService = true;
         if (this.seed !== null) {
           let newUser = firebase.database().ref('users/').push({
@@ -38,12 +43,46 @@
             this.isContactingService = false;
           }).catch((err) => {
             this.isContactingService = false;
-            this.handleLoginError(err);
+            this.handleRegisterError(err);
           });
         }
       },
-      handleLoginError(err) {
-        this.loginError = err.message;
+      handleLogin() {
+        if (this.firebaseKey !== null) {
+          firebase.database().ref(`users/${this.firebaseKey}`).once('value')
+            .then((snapshot) => {
+              this.apiBinds = snapshot.val().binds;
+            })
+            .catch(err => {
+              console.log(err);
+            })
+        }
+      },
+      handleInsertBindsToUser(bind) {
+        this.isContactingService = true;
+        let list = [];
+        let ref = firebase.database().ref(`users/${this.firebaseKey}`);
+
+        ref.once('value')
+          .then((snapshot) => {
+            let snap = snapshot.val().binds;
+            list = ( typeof snap !== undefined && snap instanceof Array ) ? snap : []
+            list.push(bind);
+          })
+          .then(() => {
+            ref.update({
+              binds: list
+            });
+            this.isContactingService = false;
+          })
+          .catch(err => {
+            this.isContactingService = false;
+            console.log(err);
+          });
+
+      },
+      handleRegisterError(err) {
+        this.registerError = err.message;
       }
     }
   }

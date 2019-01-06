@@ -1,14 +1,14 @@
 <template>
   <div id="wrapper">
     <div class="logo-wrapper">
-      <img id="logo" src="~@/assets/icons/chart-bar-regular.svg" alt="Minerity Report">
+      <img id="logo" src="~@/renderer/assets/icons/chart-bar-regular.svg" alt="Minerity Report">
       <span class="brand">Minerity Report</span>
     </div>
     <main>
       <div>
         <h2 class="title">Create Your Account</h2>
         <mr-button value="Generate new seed" width="170px" @click="createAccount()" />
-        <span v-if="this.loginError !== null">An error occured - {{this.loginError}}. Please try again later</span>
+        <span v-if="this.registerError !== null">An error occured - {{this.registerError}}. Please try again later</span>
       </div>
     </main>
   </div>
@@ -17,13 +17,13 @@
 <script>
   import uuid from 'uuid/v1';
   import firebase from 'firebase';
-  import mrButton from '@/components/controls/mrButton.vue'
+  import mrButton from '@/renderer/components/controls/mrButton.vue'
 
   export default {
     name: 'login',
     props: {
-      onHandleLogin: Function,
-      loginError: String
+      onHandleRegister: Function,
+      registerError: String
     },
     components: {
       mrButton
@@ -40,7 +40,7 @@
       createAccount() {
         const seed = this.createSeed();
 
-        this.onHandleLogin(seed);
+        this.onHandleRegister(seed);
       },
     }
   }
