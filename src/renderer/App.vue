@@ -23,7 +23,7 @@
         firebaseKey: localStorage.getItem('firebaseKey'),
         registerError: null,
         isContactingService: false,
-        apiBinds: []
+        apiBinds: new Array()
       }
     },
     mounted() {
@@ -51,7 +51,7 @@
         if (this.firebaseKey !== null) {
           firebase.database().ref(`users/${this.firebaseKey}`).once('value')
             .then((snapshot) => {
-              this.apiBinds = snapshot.val().binds;
+              this.apiBinds = snapshot.val().binds !== undefined ? snapshot.val().binds : [];
             })
             .catch(err => {
               console.log(err);
@@ -63,10 +63,11 @@
         let list = [];
         let ref = firebase.database().ref(`users/${this.firebaseKey}`);
 
+        // need to add check if bind alrdy is in the db, need to skip it
         ref.once('value')
           .then((snapshot) => {
             let snap = snapshot.val().binds;
-            list = ( typeof snap !== undefined && snap instanceof Array ) ? snap : []
+            list = ( typeof snap !== undefined && snap instanceof Array ) ? new Array(snap) : []
             list.push(bind);
           })
           .then(() => {

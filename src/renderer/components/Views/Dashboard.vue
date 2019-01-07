@@ -54,10 +54,14 @@ import { isCpuMiner, CpuMinerDataReader } from '@/main/minerListener.js';
         }
       }
     },
-    mounted() {
-      if (this.apiBinds !== undefined) {
-        for (var i = 0; i < this.apiBinds.length; i++) {
-          this.addMiner(this.apiBinds[i]);
+    watch: {
+      apiBinds: function (newVal) {
+        this.apiBinds = newVal;
+
+        if (this.apiBinds.length > 0) {
+          for (var i = 0; i < this.apiBinds.length; i++) {
+            this.addMiner(this.apiBinds[i]);
+          }
         }
       }
     },

@@ -108,6 +108,8 @@ export class CpuMinerDataReader extends EventEmitter {
                     label: isCpu ? `CPU${i}` : `GPU${i}`,
                     borderColor: "#fff",
                     fill: false
+                    // fill: true,
+                    // backgroundColor: '#1f78b4',
                 });
             }
             return sets;
