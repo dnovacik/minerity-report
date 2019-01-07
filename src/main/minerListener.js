@@ -5,6 +5,19 @@
 const wsClient = require('websocket').client;
 const EventEmitter = require('./eventEmitter.js').default;
 
+function getArrayWithLimitedLength(length) {
+    var array = new Array();
+
+    array.push = function () {
+        if (this.length >= length) {
+            this.shift();
+        }
+        return Array.prototype.push.apply(this,arguments);
+    }
+
+    return array;
+}
+
 export function isCpuMiner(ipPort) {
     return new Promise((resolve, reject) => {
         var client = new wsClient();
@@ -63,17 +76,23 @@ export class CpuMinerDataReader extends EventEmitter {
                 this.pushToDataSets(false, this.cpuCount, true, result, this)
                 this.emit('message', result);
             });
+
+            connection.on('close', (e) => {
+                this.emit('close');
+            })
         });
     }
 
     pushToDataSets = (isInitiated, threadCount, isCpu, newData, minerInstance) => {
         if (isInitiated) {
+            let labelsArray = getArrayWithLimitedLength(10);
+            labelsArray.push(new Date().toISOString())
             return {
-                labels: [new Date().toLocaleTimeString()],
+                labels: labelsArray,
                 datasets: this.getDataSetForThreadCount(isInitiated, threadCount, isCpu, newData)
             }
         } else {
-            minerInstance.chartData.labels.push(new Date().toLocaleTimeString());
+            minerInstance.chartData.labels.push(new Date().toISOString());
             this.getDataSetForThreadCount(false, threadCount, isCpu, newData, minerInstance.chartData.datasets);
         }
     }
@@ -82,8 +101,10 @@ export class CpuMinerDataReader extends EventEmitter {
         if (isInitiated) {
             let sets = [];
             for (var i = 0; i < threadCount; i++) {
+                let data = getArrayWithLimitedLength(10);
+                data.push(0);
                 sets.push({
-                    data: [0],
+                    data: data,
                     label: isCpu ? `CPU${i}` : `GPU${i}`,
                     borderColor: "#fff",
                     fill: false

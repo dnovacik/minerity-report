@@ -82,13 +82,17 @@ import { isCpuMiner, CpuMinerDataReader } from '@/main/minerListener.js';
         let miner = new CpuMinerDataReader(data.name, ipPort, data.algo, data.cpus, 5);
         this.cpuMiners.miners.push(miner);
 
+        let chart;
         this.$nextTick(() => {
-          this.createChart(miner.name, miner.chartData);
+          chart = this.createChart(miner.name, miner.chartData);
         })
 
-
         miner.on('message', (e) => {
-          this.cpuMiners.chartData[0].update();
+          chart.update();
+        });
+
+        miner.on('close', (e) => {
+          // closed conn
         });
 
       },
@@ -108,6 +112,15 @@ import { isCpuMiner, CpuMinerDataReader } from '@/main/minerListener.js';
                 ticks: {
                   beginAtZero: true,
                   padding: 25,
+                  maxTicksLimit: 10,
+                }
+              }],
+              xAxes: [{
+                type: 'time',
+                ticks: {
+                  autoSkip: true,
+                  maxTicksLimit: 10,
+                  showXLabels: 10
                 }
               }]
             }
@@ -115,6 +128,8 @@ import { isCpuMiner, CpuMinerDataReader } from '@/main/minerListener.js';
         });
 
         this.cpuMiners.chartData.push(myChart);
+
+        return myChart;
       }
     }
   }
