@@ -9,10 +9,10 @@
 </template>
 
 <script>
-import mrHeader from '@/renderer/components/Header';
-import mrLoader from '@/renderer/components/Loader';
-import mrNotificationWin from '@/renderer/components/Notification-win';
-import mrNotification from '@/renderer/components/Notification';
+import mrHeader from "@/renderer/components/Header";
+import mrLoader from "@/renderer/components/Loader";
+import mrNotificationWin from "@/renderer/components/Notification-win";
+import mrNotification from "@/renderer/components/Notification";
 
 import { isNullOrUndefined } from "util";
 

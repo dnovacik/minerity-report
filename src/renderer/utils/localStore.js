@@ -7,7 +7,7 @@ export const defaults = {
   notifications: true
 };
 
-export function createLocalStore () {
+export function createLocalStore() {
   const localStore = new LocalStore({
     configName: 'user-preferences',
     defaults
@@ -16,17 +16,17 @@ export function createLocalStore () {
 }
 
 export default class LocalStore {
-  constructor (opts) {
+  constructor(opts) {
     const userDataPath = (electron.app || electron.remote.app).getPath('userData');
     this.path = path.join(userDataPath, opts.configName + '.json');
     this.data = parseDataFile(this.path, opts.defaults);
   }
 
-  get (key) {
+  get(key) {
     return this.data[key];
   }
 
-  set (key, val) {
+  set(key, val) {
     this.data[key] = val;
     fs.writeFile(this.path, JSON.stringify(this.data), err => {
       if (err) {
@@ -36,7 +36,7 @@ export default class LocalStore {
     console.log(`Added entry ${key}: ${val} to local store`);
   }
 
-  setData (dataObj) {
+  setData(dataObj) {
     this.data = dataObj;
     console.log(dataObj, this.data);
     fs.writeFile(this.path, JSON.stringify(this.data), err => {
@@ -47,7 +47,7 @@ export default class LocalStore {
   }
 }
 
-function parseDataFile (filePath, defaults) {
+function parseDataFile(filePath, defaults) {
   try {
     return JSON.parse(fs.readFileSync(filePath));
   } catch (error) {

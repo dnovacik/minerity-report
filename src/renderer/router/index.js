@@ -5,7 +5,7 @@ import store from './../store';
 
 import Login from '@/renderer/components/Views/Login';
 import Dashboard from '@/renderer/components/Views/Dashboard';
-import { isNull, isNullOrUndefined } from 'util';
+import { isNullOrUndefined } from 'util';
 
 Vue.use(Router);
 

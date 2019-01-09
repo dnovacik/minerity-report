@@ -27,13 +27,12 @@ export default {
     }
   },
   mounted() {
-    EventEmitter.$on("closed_connection", (e) => {
-      console.log('closed', e);
-     this.notifyMinerStopped(e);
+    EventEmitter.$on("closed_connection", e => {
+      this.notifyMinerStopped(e);
     });
   },
   beforeDestroy() {
-    EventEmitter.$off("closed_connection",  (e) => this.notifyMinerStopped(e));
+    EventEmitter.$off("closed_connection", e => this.notifyMinerStopped(e));
   }
 };
 </script>

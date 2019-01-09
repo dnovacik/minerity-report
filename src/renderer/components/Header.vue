@@ -32,72 +32,72 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from "electron";
 
 export default {
-    name: 'mrHeader',
-    methods: {
-        appClose() {
-            ipcRenderer.send('window-close');
-        },
-        appMinimize() {
-            ipcRenderer.send('window-minimize');
-        }
+  name: "mrHeader",
+  methods: {
+    appClose() {
+      ipcRenderer.send("window-close");
+    },
+    appMinimize() {
+      ipcRenderer.send("window-minimize");
     }
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-    .fix-menu {
-        position: fixed;
-        top: 0;
-        display: flex;
-        flex-direction: row;
-        width: 100%;
+.fix-menu {
+  position: fixed;
+  top: 0;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 
-        & .app-drag {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 30px;
-            z-index: 0;
-            -webkit-app-region: drag;
+  & .app-drag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    z-index: 0;
+    -webkit-app-region: drag;
+  }
+
+  & .left-menu-wrapper {
+    -webkit-app-region: no-drag;
+    display: flex;
+    margin: 10px auto 0 10px;
+    z-index: 1;
+
+    & .button-wrapper {
+      cursor: pointer;
+
+      &:hover {
+        & > svg > path {
+          fill: rgb(72, 84, 96);
         }
-
-        & .left-menu-wrapper {
-            -webkit-app-region: no-drag;
-            display: flex;
-            margin: 10px auto 0 10px;
-            z-index: 1;
-
-            & .button-wrapper {
-                cursor: pointer;
-
-                &:hover {
-                    & > svg > path {
-                        fill: rgb(72, 84, 96);
-                    }
-                }
-            }
-        }
-
-        & .right-menu-wrapper {
-            -webkit-app-region: no-drag;
-            display: flex;
-            margin: 10px 10px 0 auto;
-            z-index: 1;
-
-            & .button-wrapper {
-                cursor: pointer;
-                margin-left: 10px;
-
-                &:hover {
-                    &> svg > line {
-                        stroke: rgb(72, 84, 96);
-                    }
-                }
-            }
-        }
+      }
     }
+  }
+
+  & .right-menu-wrapper {
+    -webkit-app-region: no-drag;
+    display: flex;
+    margin: 10px 10px 0 auto;
+    z-index: 1;
+
+    & .button-wrapper {
+      cursor: pointer;
+      margin-left: 10px;
+
+      &:hover {
+        & > svg > line {
+          stroke: rgb(72, 84, 96);
+        }
+      }
+    }
+  }
+}
 </style>

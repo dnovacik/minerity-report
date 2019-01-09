@@ -9,27 +9,15 @@ export default {
   name: "mrNotificationWin",
   methods: {
     callNotification(opts) {
-      let notifier = new toaster({
-        withFallback: false,
-        customPath: void 0
-      });
-      notifier.notify(
-        {
-          appID: "com.projectmerge.minerity-report",
-          title: opts.title || "Work Round Complete",
-          message: opts.message,
-          icon: path.join(__static, "icon.png"),
-          sound: false,
-          wait: false,
-          id: 1,
-          remove: void 0,
-          install: void 0
-        },
-        (err, res) => {
-          if (err) {
-            console.log(err);
-          }
-        }
+      const notification = {
+        title: opts.title || "Work Round Complete",
+        body: opts.message,
+        icon: path.join(__static, "icon.png")
+      };
+
+      const myNotification = new window.Notification(
+        notification.title,
+        notification
       );
     },
     notifyMinerStopped(e) {

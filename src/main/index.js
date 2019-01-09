@@ -35,6 +35,9 @@ function createWindow () {
   })
 }
 
+// app.setAppUserModelId("com.projectmerge.minerityReport");
+app.setAppUserModelId(process.execPath);
+
 app.on('ready', () => {
   createWindow();
   const minToTray = localStorage.get('minToTray');

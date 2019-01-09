@@ -12,7 +12,7 @@ function getArrayWithLimitedLength(length) {
         if (this.length >= length) {
             this.shift();
         }
-        return Array.prototype.push.apply(this,arguments);
+        return Array.prototype.push.apply(this, arguments);
     }
 
     return array;
@@ -27,24 +27,27 @@ export function isCpuMiner(ipPort) {
                 var data = e.utf8Data.split('|');
                 var minerTypeString = data[0].split(';');
                 var minerType = minerTypeString[0].split('=')
-    
+
                 if (minerType[1].startsWith('cpu')) {
                     let data = {
                         name: minerType[1],
                         algo: minerTypeString[3].split('=')[1],
                         cpus: minerTypeString[4].split('=')[1],
                     }
-                    resolve({ isCpu: true, data });
+                    resolve({
+                        isCpu: true,
+                        data
+                    });
                 } else {
                     resolve(false);
                 }
             });
-    
+
             connection.on('error', (e) => {
                 reject(e.message);
             });
         });
-        
+
         client.on('connectFailed', (e) => {
             reject(e.message);
         });
@@ -67,8 +70,8 @@ export class CpuMinerDataReader extends MinerEventEmitter {
         this.cpuCount = cpuCount;
         this.chartData = this.pushToDataSets(true, this.cpuCount, true);
         this.client = new wsClient();
-
-        var interval = setInterval(() => this.client.connect(`ws://${ipPort}/threads`, 'text'), interval * 1000);
+        this.delay = interval;
+        this.interval = null;
 
         this.client.on('connect', (connection) => {
             connection.on('message', (e) => {
@@ -79,9 +82,13 @@ export class CpuMinerDataReader extends MinerEventEmitter {
         });
 
         this.client.on('connectFailed', (e) => {
-            clearInterval(interval);
+            clearInterval(this.interval);
             this.emit('miner_close_connection', this.name);
         });
+    }
+
+    runInInterval = () => {
+        this.interval = setInterval(() => this.client.connect(`ws://${this.ipPort}/threads`, 'text'), this.delay * 1000);
     }
 
     pushToDataSets = (isInitiated, threadCount, isCpu, newData, minerInstance) => {
@@ -117,7 +124,7 @@ export class CpuMinerDataReader extends MinerEventEmitter {
         } else {
             for (var i = 0; i < threadCount; i++) {
                 oldDataSets[i].data.push(newData[i][1])
-            }  
+            }
         }
     }
 
@@ -144,8 +151,7 @@ export class CpuMinerDataReader extends MinerEventEmitter {
 
                 if (each[0] === 'CPU') {
                     cpu = parseInt(each[1], 10);
-                }
-                else if (each[0] === 'KHS' || each[0] === 'kH/s') {
+                } else if (each[0] === 'KHS' || each[0] === 'kH/s') {
                     plot.hashrate = parseFloat(each[1]);
                 }
             }
@@ -154,7 +160,7 @@ export class CpuMinerDataReader extends MinerEventEmitter {
                 continue;
             }
 
-            rates[cpu] = [+ new Date(), plot.hashrate]
+            rates[cpu] = [+new Date(), plot.hashrate]
         }
         return rates;
     }

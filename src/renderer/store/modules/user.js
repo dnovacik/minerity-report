@@ -26,7 +26,11 @@ const mutations = {
     },
 
     ADD_APIBIND (state, payload) {
-        localStorage.set('apibinds', [payload.val, ...state.apibinds]);
+        if (state.apibinds.some(a => a == payload.val)) {
+            localStorage.set('apibinds', [...state.apibinds]);
+        } else {
+            localStorage.set('apibinds', [payload.val, ...state.apibinds]);
+        }
     },
 
     REMOVE_APIBIND (state, payload) {

@@ -20,7 +20,7 @@
   },
   "build": {
     "productName": "Minerity Report",
-    "appId": "com.projectmerge.minerity-report",
+    "appId": "com.projectmerge.minerityReport",
     "directories": {
       "output": "build"
     },
