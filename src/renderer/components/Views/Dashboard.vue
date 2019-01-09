@@ -30,7 +30,8 @@ import mrButton from '@/renderer/components/controls/mrButton';
 import mrRoundButton from '@/renderer/components/controls/mrRoundButton';
 import mrInput from '@/renderer/components/controls/mrInput';
 
-import { isCpuMiner, CpuMinerDataReader } from '@/renderer/utils/minerListener.js';
+import { EventEmitter } from '@/renderer/utils/eventEmitter';
+import { isCpuMiner, CpuMinerDataReader } from '@/renderer/utils/minerListener';
 
   export default {
     name: 'dashboard',
@@ -72,7 +73,7 @@ import { isCpuMiner, CpuMinerDataReader } from '@/renderer/utils/minerListener.j
         isCpuMiner(arg)
           .then(result => {
             if (result.isCpu) {
-              this.onHandleInsertBindsToUser(arg);
+              this.addApiBindToUser(arg);
               this.handleCpuMinerAdd(result.data, arg);
             } else {
               console.log('gpu');
@@ -82,8 +83,16 @@ import { isCpuMiner, CpuMinerDataReader } from '@/renderer/utils/minerListener.j
               console.log(err);
           });
       },
+      addApiBindToUser(ipPort) {
+        const payload = {
+          key: 'apibinds',
+          val: ipPort
+        }
+
+        this.$store.dispatch('addApiBind', payload);
+      },
       handleCpuMinerAdd(data, ipPort) {
-        let miner = new CpuMinerDataReader(data.name, ipPort, data.algo, data.cpus, 5);
+        let miner = new CpuMinerDataReader(data.name, ipPort, data.algo, data.cpus, 10);
         this.cpuMiners.miners.push(miner);
 
         let chart;
@@ -91,12 +100,13 @@ import { isCpuMiner, CpuMinerDataReader } from '@/renderer/utils/minerListener.j
           chart = this.createChart(miner.name, miner.chartData);
         })
 
-        miner.on('message', (e) => {
+        miner.on('miner_update', (e) => {
           chart.update();
         });
 
-        miner.on('close', (e) => {
-          // closed conn
+        miner.on('miner_close_connection', (e) => {
+          console.log('closed', e);
+          EventEmitter.$emit('miner_close_connection', e)
         });
 
       },

@@ -36,9 +36,6 @@ import { ipcRenderer } from 'electron';
 
 export default {
     name: 'mrHeader',
-    props: {
-        firebaseKey: String,
-    },
     methods: {
         appClose() {
             ipcRenderer.send('window-close');

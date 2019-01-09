@@ -20,7 +20,7 @@
   },
   "build": {
     "productName": "Minerity Report",
-    "appId": "com.example.yourapp",
+    "appId": "com.projectmerge.minerity-report",
     "directories": {
       "output": "build"
     },
@@ -56,11 +56,13 @@
     "axios": "^0.18.0",
     "chart.js": "^2.7.3",
     "firebase": "^5.7.2",
+    "node-notifier": "^5.3.0",
     "uuid": "^3.3.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
     "vue-simple-spinner": "^1.2.8",
+    "vuex": "^3.0.1",
     "websocket": "^1.0.28"
   },
   "devDependencies": {

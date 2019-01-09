@@ -8,7 +8,6 @@
       <div>
         <h2 class="title">Create Your Account</h2>
         <mr-button value="Generate new seed" width="170px" @click="createAccount()" />
-        <span v-if="this.registerError !== null">An error occured - {{this.registerError}}. Please try again later</span>
       </div>
     </main>
   </div>
@@ -16,7 +15,6 @@
 
 <script>
   import uuid from 'uuid/v1';
-  import firebase from 'firebase';
   import mrButton from '@/renderer/components/controls/mrButton.vue'
 
   export default {
@@ -28,10 +26,10 @@
     components: {
       mrButton
     },
-    data() {
-      return {
-        key: '',
-      };
+    computed: {
+      seed() {
+        return this.$store.getters.seed;
+      }
     },
     methods: {
       createSeed() {
@@ -39,8 +37,13 @@
       },
       createAccount() {
         const seed = this.createSeed();
+        
+        const payload = {
+          key: 'seed',
+          val: seed
+        };
 
-        this.onHandleRegister(seed);
+        this.$store.dispatch('registerUser', payload);
       },
     }
   }

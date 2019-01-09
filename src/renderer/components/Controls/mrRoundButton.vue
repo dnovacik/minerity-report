@@ -30,10 +30,38 @@ export default {
             font-family: 'Source Sans Pro', sans-serif;
             width: 40px;
             cursor: pointer;
+            overflow: hidden;
+            display: inline-block;
+            position: relative;
 
+            &::after {
+               content:"";
+               height:220%;
+               width:35%;
+               position:absolute;
+               z-index:1;
+               right:0;
+               top:10%;
+               margin:-5px 0 0 -5px;
+               -webkit-transform-origin:0 0;
+               -webkit-transform:rotate(-20deg);
+               -moz-transform-origin:0 0;
+               -moz-transform:rotate(-20deg);
+               -ms-transform-origin:0 0;
+               -ms-transform:rotate(-20deg);
+               transform-origin:0 0;
+               transform:rotate(-20deg);
+               transition: all .3s ease-in-out;
+               background:rgba(255,255,255,0.02) 
+            }
+            
             &:hover {
-                color: rgb(211, 209, 209);
-                background-color: rgb(73, 92, 107);
+                color: #fff;
+
+                &::after {
+                    width:50%;
+                    background:rgba(255,255,255,0.05)
+                }
             }
         }
     }

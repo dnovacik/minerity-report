@@ -3,7 +3,7 @@
 
 // all commands 'summary', 'threads', 'histo'
 const wsClient = require('websocket').client;
-const EventEmitter = require('./eventEmitter').default;
+const MinerEventEmitter = require('./eventEmitter').default;
 
 function getArrayWithLimitedLength(length) {
     var array = new Array();
@@ -57,7 +57,7 @@ export function isCpuMiner(ipPort) {
     });
 }
 
-export class CpuMinerDataReader extends EventEmitter {
+export class CpuMinerDataReader extends MinerEventEmitter {
     constructor(name, ipPort, algo, cpuCount, interval) {
         super();
 
@@ -68,18 +68,19 @@ export class CpuMinerDataReader extends EventEmitter {
         this.chartData = this.pushToDataSets(true, this.cpuCount, true);
         this.client = new wsClient();
 
-        setInterval(() => this.client.connect(`ws://${ipPort}/threads`, 'text'), interval * 1000);
+        var interval = setInterval(() => this.client.connect(`ws://${ipPort}/threads`, 'text'), interval * 1000);
 
         this.client.on('connect', (connection) => {
             connection.on('message', (e) => {
                 let result = this.parseHashrateMessage(e.utf8Data, cpuCount);
                 this.pushToDataSets(false, this.cpuCount, true, result, this)
-                this.emit('message', result);
+                this.emit('miner_update', result);
             });
+        });
 
-            connection.on('close', (e) => {
-                this.emit('close');
-            })
+        this.client.on('connectFailed', (e) => {
+            clearInterval(interval);
+            this.emit('miner_close_connection', this.name);
         });
     }
 

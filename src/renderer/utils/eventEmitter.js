@@ -1,4 +1,8 @@
-export default class EventEmitter {
+import Vue from 'vue';
+
+export const EventEmitter = new Vue();
+
+export default class MinerEventEmitter {
     constructor () {
       this._callbacks = {}
     }
@@ -21,3 +25,4 @@ export default class EventEmitter {
       }
     }
   }
+

@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+import store from './../store';
+
 import Login from '@/renderer/components/Views/Login';
 import Dashboard from '@/renderer/components/Views/Dashboard';
+import { isNull, isNullOrUndefined } from 'util';
 
 Vue.use(Router);
 
@@ -30,7 +33,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (localStorage.getItem('firebaseKey') == null) {
+    if (isNullOrUndefined(store.getters.seed)) {
       next({
         name: 'login',
         query: {
@@ -45,4 +48,4 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-export default router;
+export default router
