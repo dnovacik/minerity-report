@@ -30,7 +30,7 @@ import mrButton from '@/renderer/components/controls/mrButton';
 import mrRoundButton from '@/renderer/components/controls/mrRoundButton';
 import mrInput from '@/renderer/components/controls/mrInput';
 
-import { isCpuMiner, CpuMinerDataReader } from '@/main/minerListener.js';
+import { isCpuMiner, CpuMinerDataReader } from '@/renderer/utils/minerListener.js';
 
   export default {
     name: 'dashboard',

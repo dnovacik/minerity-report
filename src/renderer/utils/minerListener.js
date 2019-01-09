@@ -3,7 +3,7 @@
 
 // all commands 'summary', 'threads', 'histo'
 const wsClient = require('websocket').client;
-const EventEmitter = require('./eventEmitter.js').default;
+const EventEmitter = require('./eventEmitter').default;
 
 function getArrayWithLimitedLength(length) {
     var array = new Array();
@@ -121,7 +121,6 @@ export class CpuMinerDataReader extends EventEmitter {
     }
 
     parseHashrateMessage = (e, cpuCount) => {
-        //"CPU=0;kH/s=29.20|CPU=1;kH/s=29.19|"
         var rates = [];
 
         for (var cpu = 0; cpu < cpuCount; cpu++) {
