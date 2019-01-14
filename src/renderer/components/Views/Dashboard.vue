@@ -25,8 +25,8 @@
               v-for="miner in this.cpuMiners.miners"
               v-bind:key="miner.name"
               :id="miner.name"
-              width="800"
-              height="450"
+              width="400"
+              height="250"
             />
           </div>
         </div>
@@ -217,6 +217,7 @@ export default {
 
       & .charts {
         display: flex;
+        flex-direction: row;
         margin-top: 40px;
       }
     }
