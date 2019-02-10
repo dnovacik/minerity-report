@@ -1,15 +1,19 @@
 <template>
   <div id="app">
-    <mr-loader v-if="isContactingService" :message="'Contacting service...'"/>
-    <mr-header/>
-    <router-view class="non-selectable" :apiBinds="apiBinds"></router-view>
-    <mr-notification-win v-if="os === 'win32' && notifications"/>
-    <mr-notification v-else-if="os !== 'win32' && notifications"/>
+    <div class="page-wrapper">
+      <mr-loader v-if="isContactingService" :message="'Contacting service...'"/>
+      <mr-header/>
+      <mr-left-menu/>
+      <router-view class="non-selectable" :apiBinds="apiBinds"></router-view>
+      <mr-notification-win v-if="os === 'win32' && notifications"/>
+      <mr-notification v-else-if="os !== 'win32' && notifications"/>
+    </div>
   </div>
 </template>
 
 <script>
 import mrHeader from "@/renderer/components/Header";
+import mrLeftMenu from "@/renderer/components/LeftMenu";
 import mrLoader from "@/renderer/components/Loader";
 import mrNotificationWin from "@/renderer/components/Notification-win";
 import mrNotification from "@/renderer/components/Notification";
@@ -20,6 +24,7 @@ export default {
   name: "minerity-report",
   components: {
     mrHeader,
+    mrLeftMenu,
     mrLoader,
     mrNotification,
     mrNotificationWin
@@ -63,6 +68,22 @@ $error-color: #f53b57;
 $neutral-color: #05c46b;
 
 $text-input-border: 1px solid rgba(255, 255, 255, 0.3);
+
+#app {
+  height: 100vh;
+  width: 100vw;
+
+  .page-wrapper {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+
+    .non-selectable {
+      width: 100%;
+    }
+  }
+}
+
 
 * {
   margin: 0;

@@ -175,9 +175,8 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro");
 
 #wrapper {
-  height: 100vh;
+  height: 100%;
   padding: 60px 80px;
-  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
